@@ -1,0 +1,271 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>NBC SVD Analysis</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="icon" href="favicon.ico">
+</head>
+<style>
+html, body {
+	font-family: 'Open Sans', sans-serif;
+	width: 100%;
+	height: 100%;
+}
+p {
+	font-size: 1.3em;
+}
+.head {
+	padding-top: 50px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	position: relative;
+	width: 100%;
+}
+.head:after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 0.5em;
+	border-top: 1px solid black;
+	z-index: -1;
+}
+h1 {
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 3.5em;
+}
+h2 {
+	font-weight: bold;
+	font-size: 1.8em;
+}
+h3 {
+	font-weight: bold;
+	font-size: 1.5em;
+}
+#eventAnim {
+	max-width: 65%;
+	text-align: center;
+	margin-top: 30px;
+}
+#eventImage {
+	max-width: 85%;
+}
+.page-footer {
+	padding: 50px;
+	background-color: #eeeeee;
+}
+</style>
+<body>
+<div class="container">
+	<div class="head">
+		<h1>NBC Dataset Analysis</h1>
+	</div>
+	<div class="panel-group">
+		<p>Preliminary analyses on the NBC (New Brown Corpus) dataset.</p>
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Definitions</h2></div>
+			<div class="panel-body">
+				<h3>Frame</h3>
+				<p>The data collected at a specific point in time.
+					The spatial component is a matrix, where each row corresponds to an object, and each column
+					corresponds to a spatial parameter. All objects in the user's field of view are
+					present in the matrix. We also save a corresponding 960x540 image, and any caption being
+					spoken by the user at that point in time.</p>
+				<a class="btn btn-primary" data-toggle="collapse" href="#spatialParams" role="button" aria-expanded="false" aria-controls="spatialParams">
+					Spatial Parameter Specification <span class="glyphicon glyphicon-menu-down"></span>
+				</a>
+				<a class="btn btn-primary" data-toggle="collapse" href="#frameExample" role="button" aria-expanded="false" aria-controls="frameExample">
+					Example Raw Frame Data <span class="glyphicon glyphicon-menu-down"></span>
+				</a>
+				<div class="collapse" id="spatialParams">
+					<div class="card card-body">
+						<p><ul>
+							<li><b>[0-2]</b> Position: XYZ World Coordinates</li>
+							<li><b>[3-6]</b> Rotation: XYZW World Quaternion</li>
+							<li><b>[7-9]</b> Relative Position: XYZ Relative to Head</li>
+							<li><b>[10-13]</b> Relative Rotation: XYZW Relative to Head</li>
+							<li><b>[14-16]</b> Velocity: XYZ World Coordinates</li>
+							<li><b>[17-19]</b> Bounds: XYZ Radial Distance to Bounding Box</li>
+							<li><b>[20-22]</b> Distances: Euclidean Distance to Head, LeftHand, and RightHand*</li>
+						</ul>*Not in example frame. Can be inferred from the other parameters.</p>
+					</div>
+				</div>
+				<div class="collapse" id="frameExample">
+					<div class="card card-body">
+						<p><code>{"step": 11825, "caption": "recording okay so we're going to start by clearing off the table so we have a book that we're going to move", "labels": ["Banana", "Apple", "Plant", "Book", "Bowl", "Lamp", "Bear", "Head", "Counter", "Trash_Bin", "Wall", "Wall", "Window", "Window", "Floor", "Clock", "Chair"], "spatial": [[-1.2269071340560913, 0.8529512286186218, 0.7297241091728209, -2.583523837529356e-06, 0.3663714528083801, 3.818333880190039e-07, 0.9304686784744264, 0.6956155896186829, -0.3934499621391296, 0.811493456363678, 0.0796603411436081, -0.9734069108963012, 0.13733167946338656, -0.16514675319194794, 0.0, 0.0, 0.0, 0.13999366760253906, 0.05222296714782715, 0.13256072998046875], [-1.2020001411437988, 0.8575860857963562, 0.49700012803077703, -8.568166975919668e-08, 0.27118808031082153, 1.1711379954704172e-07, 0.9625263810157776, 0.4774802029132843, -0.3875598311424256, 0.8962551951408386, 0.09303350746631622, -0.9519310593605042, 0.12865060567855835, -0.26195666193962097, 0.0, 0.0, 0.0, 0.07073318958282471, 0.07506358623504639, 0.07077550888061522], [-1.2420001029968262, 0.8578472137451172, -0.7580003142356873, -3.736058218350991e-08, -1.0320383125872466e-07, 4.757494664886508e-08, 1.0, -0.6180012226104736, -0.32507416605949396, 1.5066995620727541, 0.12443579733371735, -0.8452191352844238, 0.09860006719827652, -0.5102925896644592, 0.0, 0.0, 0.0, 0.18295195698738095, 0.20589639246463776, 0.21111980080604556], [-1.1490014791488647, 0.8972001075744629, -0.2746005058288574, -0.11457568407058714, -0.11457566916942595, 0.697762668132782, 0.6977622509002686, -0.2351529002189636, -0.33580726385116577, 1.1949551105499268, -0.4331715106964111, -0.6294187903404236, -0.39836251735687256, -0.5074465870857239, 0.0, 0.0, 0.0, 0.15139222145080564, 0.038191139698028564, 0.15139251947402954], [-1.218999981880188, 0.8557466864585876, 1.0470004081726074, -6.215629344552554e-09, 0.1460184007883072, 2.195154502615537e-09, 0.9892818927764891, 0.9732384681701659, -0.4058439433574677, 0.658174991607666, 0.10870465636253357, -0.9106721282005309, 0.11571323871612547, -0.3814055919647217, 0.0, 0.0, 0.0, 0.19608373939991, 0.056241314858198166, 0.1960837244987488], [-1.2399998903274536, 0.8579645752906799, 0.10300109535455704, 1.1865874512295704e-05, -1.3014304158787129e-06, -3.385977470315993e-05, 1.0, 0.1449325680732727, -0.35974931716918945, 1.1091355085372925, 0.12445849925279615, -0.8452131748199463, 0.09862727671861647, -0.5102917551994324, 0.0, 0.0, 0.0, 0.1801784485578537, 0.2943168580532074, 0.18016526103019714], [-0.7210500836372375, 0.6763865947723389, -0.44065988063812256, -0.7031905651092529, 0.07431771606206894, 0.07431807368993759, 0.7031903862953186, -0.5500683784484863, -0.6719844937324524, 0.9774924516677856, 0.3761921525001526, -0.7108563184738159, -0.5536916851997375, -0.21584372222423556, 0.0, 0.0, 0.0, 0.16758640110492706, 0.18887223303318024, 0.1927768886089325], [-0.35736802220344543, 1.5412052869796753, 0.4700834453105927, -0.12443580478429794, 0.8452191948890686, -0.09860013425350188, -0.5102925300598145, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.000000238418579, 0.0, 0.0, 0.0, 0.31945914030075073, 0.2705967426300049, 0.27731943130493164], [-1.2427998781204224, 0.0, 0.17550000548362732, 0.0, 0.7071068286895752, 0.0, 0.7071068286895752, 0.3046424090862274, -1.176467776298523, 1.3301126956939695, 0.01826857961714268, -0.9584916234016418, 0.1577102392911911, 0.23682893812656405, 0.0, 0.0, 0.0, 0.2984023988246918, 0.4260432720184326, 1.2013956308364868], [-0.3906500041484833, 0.0003142058849334717, -1.5664957761764526, 0.0, 3.49227775586769e-05, 0.0, 1.0, -1.6227785348892212, -1.37204909324646, 1.4167497158050537, 0.12443236261606215, -0.8452370166778564, 0.0986044779419899, -0.5102630257606506, 0.0, 0.0, 0.0, 0.15783928334712982, 0.2197893112897873, 0.18031932413578036], [1.625, 0.0, -1.7549960613250732, 0.0, 0.0, 0.0, 1.0, -2.693457126617432, -1.9916965961456297, -0.18576788902282715, 0.12443580478429794, -0.8452191948890686, 0.09860013425350188, -0.5102925300598145, 0.0, 0.0, 0.0, 1.625, 1.522666335105896, 0.028760414570569992], [-1.625, 0.0, -1.7874999046325684, 0.0, 0.7070885300636292, 0.0, 0.7071250677108765, -1.265531301498413, -0.9797188639640808, 2.552933931350708, 0.018272653222084045, -0.9584977030754088, 0.1577097624540329, 0.23680415749549866, 0.0, 0.0, 0.0, 0.028844293206930164, 1.522666335105896, 1.6250014305114746], [0.6499999761581421, 0.0, -1.8538041114807131, 0.0, 0.0, 0.0, 1.0, -2.3440871238708496, -1.6845694780349731, 0.676787257194519, 0.12443580478429794, -0.8452191948890686, 0.09860013425350188, -0.5102925300598145, 0.0, 0.0, 0.0, 0.6499969363212585, 0.6649095416069031, 0.04984831809997559], [-1.6997499465942385, 0.0, -0.8066501021385193, 0.0, 0.7070482969284058, 0.0, 0.7071653604507446, -0.3618579506874085, -0.9953932166099548, 2.1646254062652592, 0.018281633034348488, -0.9585111737251282, 0.15770871937274933, 0.2367495894432068, 0.0, 0.0, 0.0, 0.049955833703279495, 0.6649095416069031, 0.6500052213668823], [0.0, 0.0, -0.12999583780765533, 0.0, 0.0, 0.0, 1.0, -0.5234462618827821, -1.550832748413086, 0.42900219559669495, 0.12443580478429794, -0.8452191948890686, 0.09860013425350188, -0.5102925300598145, 0.0, 0.0, 0.0, 1.6250001192092896, 0.0, 1.6250005960464478], [-1.2419999837875366, 0.021999998018145558, -1.3899996280670166, 0.0, 0.7070944905281067, 0.0, 0.7071190476417542, -1.0869736671447754, -1.0937066078186035, 2.042734146118164, 0.018271315842866898, -0.9584956169128418, 0.15770991146564484, 0.2368122637271881, 0.0, 0.0, 0.0, 0.2819261848926544, 1.1133790016174316, 0.33855631947517395], [-0.7291538119316101, 0.0009999872418120503, -0.4429291188716888, 0.0, -0.6511054039001465, 0.0, 0.7589873671531677, -0.4743449091911316, -1.3107130527496338, 1.1836711168289185, 0.15864428877830505, -0.3092564642429352, -0.006184568628668785, -0.937632381916046, 0.0, 0.0, 0.0, 0.30834296345710754, 0.4806551933288574, 0.2508867084980011]], "image_url": "gs://nbc_release/1_1a/1_1a_task1/11825.png"}</code></p>
+					</div>
+				</div>
+				<h3>Event</h3>
+				<p>A short sequence of frames. This is analogous to the 1.5s video chunks used in
+					<a href="https://arxiv.org/abs/1904.01766">VideoBERT</a>. We split each session
+					into non-overlapping 10-frame events, sampled at 5 frames-per-second, for 2-second events.</p>
+				<div class="text-center">
+					<figure class="figure">
+						<img src="images/event.png" id="eventImage" class="figure-img">
+						<figcaption class="figure-caption">Structure of an Event</figcaption>
+					</figure>
+					<figure class="figure">
+						<img src="images/event.gif" id="eventAnim" alt="Example Event Animation" class="figure-img">
+						<figcaption class="figure-caption">Example Event, Sampled at 5 FPS</figcaption>
+					</figure>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel panel-heading"><h2>Singular Value Decomposition</h2></div>
+			<div class="panel panel-body">
+				<p>We employ <a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html">SVD</a>
+					to reduce events to 512-dimensional vectors. We do this separately for spatial and visual components.</p>
+				<h3>Spatial</h3>
+				<p>We convert each <b><i>{num_objects}</i></b> x23 spatial data matrix into an LSA-style <b><i>V</i></b> x23 sparse matrix, where <b><i>V</i></b>
+					is the number of possible physical objects, analogous to vocab size. We populate this matrix with values from our
+					dense matrix, leaving non-present or non-visible object columns as zeros. Objects that appear multiple times per frame
+					(walls) are overridden, with only the last wall in the frame appearing in the sparse matrix.</p>
+				<p>The 10x<b><i>V</i></b> x23 sparse event matrix is then flattened into a single 230x<b><i>V</i></b> vector, which
+					can easily be reduced using SVD.</p>
+				<h3>Visual</h3>
+				<p>The visual data of each event consists of ten 960x540x3 images. These images are scaled down to size
+					120x67x3, then concatenated and flattened into a 241200-dimensional vector.</p>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel panel-heading"><h2>Nearest Neighbors</h2></div>
+			<div class="panel panel-body">
+				<p>We compute nearest neighbors, for both spatial and visual vectors, across various kitchen configurations.
+					These configurations are as follows:</p>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">id</th>
+							<th scope="col">style</th>
+							<th scope="col">configuration</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">1</th>
+							<td>1a</td>
+							<td>1</td>
+							<td>a</td>
+						</tr>
+						<tr>
+							<th scope="row">2</th>
+							<td>1b</td>
+							<td>1</td>
+							<td>b</td>
+						</tr>
+						<tr>
+							<th scope="row">3</th>
+							<td>1c</td>
+							<td>1</td>
+							<td>c</td>
+						</tr>
+						<tr>
+							<th scope="row">4</th>
+							<td>2a</td>
+							<td>2</td>
+							<td>a</td>
+						</tr>
+						<tr>
+							<th scope="row">5</th>
+							<td>2b</td>
+							<td>2</td>
+							<td>b</td>
+						</tr>
+						<tr>
+							<th scope="row">6</th>
+							<td>2c</td>
+							<td>2</td>
+							<td>c</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>We iterate each pair <b>(a, b)</b> in <b>[1-6] X [1-6]</b>, where <b>a</b> and <b>b</b> are kitchen configurations.
+					We sample 5 random events from <b>a</b>, and compute the nearest neighbor in <b>b</b>, for a total of 180
+					nearest-neighbor pairs for each of spatial and visual.</p>
+				<p>For pairs where <b>a=b</b>, we split between participants. There are three participants per configuration, so we assign
+					two participants to <b>a</b> and one to <b>b</b>. This is to avoid trivial nearest neighbor pairs, such as sequentially adjacent
+					events.</p>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel panel-heading"><h2>Annotation</h2></div>
+			<div class="panel panel-body">
+				<p>We visualize each <b>(a, b)</b> nearest-neighbor pair as side-by-side animated sequences, then
+					annotated their similarity on a 1-5 likert scale, where 1 is <i>not the same action at all</i> and 5 is
+					<i>totally the same action</i>. The results of this annotation are as follows:</p>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">type</th>
+								<th scope="col">match properties</th>
+								<th scope="col">avg. similarity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>spatial</td>
+								<td>any style, any configuration (e.g. 1a, 2b)</td>
+								<th scope="col">1.33</th>
+							</tr>
+							<tr>
+								<td></td>
+								<td>same style, any configuration (e.g. 1a, 1b)</td>
+								<th scope="col">1.68</th>
+							</tr>
+							<tr>
+								<td></td>
+								<td>same style, same configuration (e.g. 1a, 1a)</td>
+								<th scope="col">2.20</th>
+							</tr>
+							<tr>
+								<td>visual</td>
+								<td>any style, any configuration</td>
+								<th scope="col">1.10</th>
+							</tr>
+							<tr>
+								<td></td>
+								<td>same style, any configuration</td>
+								<th scope="col">1.33</th>
+							</tr>
+							<tr>
+								<td></td>
+								<td>same style, same configuration</td>
+								<th scope="col">1.73</th>
+							</tr>
+						</tbody>
+					</table>
+					<p>Spatial nearest neighbors were annotated with higher average similarity across the board.</p>
+					<a class="btn btn-primary" data-toggle="collapse" href="#notes" role="button" aria-expanded="false" aria-controls="notes">
+						Additional Notes <span class="glyphicon glyphicon-menu-down"></span>
+					</a>
+					<div class="collapse" id="notes">
+						<div class="card card-body">
+							<p><ul>
+								<li>Human bias is toward moving, held, and nearby objects.</li>
+								<li>Spatial vectors are biased toward direction-facing and background objects. Facing a particular
+									corner of the room, for example, regardless of style or layout, will be regarded as
+									more similar.</li>
+								<li>Goal: Encourage human-like bias while discouraging direction-facing and background bias,
+									ideally indirectly through learning.</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="page-footer">
+		<div class="footer-copyright text-center py-3"><a href="http://dylanebert.com">Dylan Ebert</a></div>
+	</footer>
+	</div>
+</div>
+</body>
+</html>
