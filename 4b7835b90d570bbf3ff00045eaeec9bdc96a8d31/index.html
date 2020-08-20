@@ -52,7 +52,7 @@ h3 {
 	padding: 50px;
 	background-color: #eeeeee;
 }
-#img-dset {
+.img-full {
 	width: 100%;
 	max-width: 980px;
 	padding-bottom: 50px;
@@ -70,7 +70,7 @@ h3 {
 			<div class="panel-body">
 				<p>A toy dataset is generated to test the model. Any inputs must take a similar form.</p>
 				<hr>
-				<img id="img-dset" src="images/dset@2x.png"></img>
+				<img src="images/dset@2x.png" class="img-full"></img>
 				<p><b>labels</b></p>
 				<p>Sequence of <i>N</i> action labels.</p>
 				<p><b>features</b></p>
@@ -89,6 +89,7 @@ h3 {
 				<p>For closed-form supervised training, there are no epochs or algorithms. Instead, the following parameters are inferred directly
 					from statistics of the training data:</p>
 				<hr>
+				<img src="images/supervision@2x.png" class="img-full"></img>
 				<p><b>init_logits</b></p>
 				<p><i>n_class</i> vector of initial probabilities, computed as the log of the number of times each class is the starting class.</p>
 				<p><b>transition_logits</b></p>
@@ -105,6 +106,8 @@ h3 {
 			<div class="panel-heading"><h2>Inference</h2></div>
 			<div class="panel-body">
 				<p>The <b>viterbi algorithm</b> is used to compute the most likely state sequence given the feature observations.</p>
+				<hr>
+				<img src="images/inference@2x.png" style="max-width: 100%;"></img>
 				<hr>
 				<p><b>init_probs</b></p>
 				<p>Likelihood of given class being the starting class.</p>
