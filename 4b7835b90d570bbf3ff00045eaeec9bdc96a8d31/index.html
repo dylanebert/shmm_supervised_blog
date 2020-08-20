@@ -109,11 +109,15 @@ h3 {
 				<p><b>init_probs</b></p>
 				<p>Likelihood of given class being the starting class.</p>
 				<p><b>trans_probs</b></p>
-				<p>Likelihood of the given transition from class a to b.</p>
+				<p>Likelihood of the given transition from class w to u.</p>
 				<p><b>emission_probs</b></p>
 				<p>Likelihood of given features for each class.</p>
 				<p><b>length_probs</b></p>
 				<p>Likelihood of any given length for each class, computed from poisson distribution.</p>
+				<hr>
+				<p>These parameters are aggregated into a <i>(b, N, K, C, C)</i> matrix of scores, where <i>b</i> is number of batches, <i>N</i> is sequence length,
+					<i>K</i> is viterbi sliding window size, and <i>C</i> is number of classes. This matrix can be processed by torch_struct to return state sequence
+					probabilities.</p>
 			</div>
 		</div>
 	</div>
